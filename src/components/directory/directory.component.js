@@ -15,7 +15,7 @@ class DirectoryComponent extends Component {
                     title: 'hats',
                     imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
                     id: 1,
-                    linkUrl: 'shop/hats'
+                    linkUrl: 'hats'
                 },
                 {
                     title: 'jackets',
@@ -53,12 +53,13 @@ class DirectoryComponent extends Component {
             <div className="directory-menu">
                 {
                     //instead of writing like this section.id we are gonna destructure the values like this ({id, title})
-                    this.state.sections.map(({title, imageUrl, linkUrl, id, size}) => (
-                        <MenuItem key={id} title={title} imageUrl={imageUrl} size={size}/>
+                    //OR call the id vallue and spread the rest like so ...otherValues
+                    this.state.sections.map(({id, ...otherSectionProps}) => (
+                        <MenuItem key={id}  {...otherSectionProps}/>
                     ))
                 }
             </div>
         );
     };
-};
+}
 export default DirectoryComponent
