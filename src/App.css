@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+body {
+  font-family: 'Poppins', 'Roboto', sans-serif;
+  padding: 20px 80px;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
