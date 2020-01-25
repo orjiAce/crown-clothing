@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+a {
+  text-decoration: none;
+  color: #113311;
+}
 body {
   font-family: 'Poppins', 'Roboto', sans-serif;
   padding: 20px 80px;
