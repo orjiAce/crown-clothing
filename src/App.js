@@ -17,7 +17,6 @@ class App extends Component {
         super(props);
         this.state = {
             currentUser: null,
-            userData: null,
         }
     }
 
@@ -42,7 +41,7 @@ class App extends Component {
                             ...snapShot
                         }
                     }, (() => {
-                        console.log(this.state)
+                        console.log(snapShot.data())
                     }));
                     console.log(this.state);
                 });
