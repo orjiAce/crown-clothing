@@ -5,7 +5,7 @@ import HomePage from "./pages/homepage/homepage";
 import SignIn from './pages/auth-forms/auth-page'
 import ShopPage from "./pages/shop/ShopPage";
 import HeaderComponent from "./components/header/header-component";
-import {auth} from "./firebase/firebase.uitils";
+import {auth, createUserProfileDocument} from "./firebase/firebase.uitils";
 
 
 class App extends Component {
@@ -16,15 +16,40 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentUser: null
+            currentUser: null,
+            userData: null,
         }
     }
 
     componentDidMount() {
         //because this is an open subscription we wanna close the subscription
-        auth.onAuthStateChanged(user => {
-            this.setState({currentUser: user});
-            console.log(user)
+        /*    auth.onAuthStateChanged(user => {
+                this.setState({currentUser: user});
+                //console.log(user)
+            })*/
+
+        this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+//if user authentication exists
+            if (userAuth) {
+                //create the user
+                const userRef = await createUserProfileDocument(userAuth);
+                //get the user data for the for the frontEnd
+                userRef.onSnapshot(snapShot => {
+                    //console.log(snapShot.data())
+                    this.setState({
+                        currentUser: {
+                            id: snapShot.id,
+                            ...snapShot
+                        }
+                    }, (() => {
+                        console.log(this.state)
+                    }));
+                    console.log(this.state);
+                });
+
+            }
+            this.setState({currentUser: userAuth})
+
         })
 
     }
