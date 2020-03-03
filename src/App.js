@@ -6,51 +6,45 @@ import SignIn from './pages/auth-forms/auth-page'
 import ShopPage from "./pages/shop/ShopPage";
 import HeaderComponent from "./components/header/header-component";
 import {auth, createUserProfileDocument} from "./firebase/firebase.uitils";
+import {connect} from 'react-redux';
+import {setCurrentUser} from './redux/user/userActions'
+
+//connect allows our component to have access to things related to redux
 
 
 class App extends Component {
 
+
     unsubscribeFromAuth = null;
 
-    //here we are going store our user state so we can use it throughout our application
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentUser: null,
-        }
-    }
-
     componentDidMount() {
+
         //because this is an open subscription we wanna close the subscription
         /*    auth.onAuthStateChanged(user => {
                 this.setState({currentUser: user});
                 //console.log(user)
             })*/
 
+        //destructure setCurrentUser from props
+        const {setCurrentUser} = this.props;
+
         this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-//if user authentication exists
+            //if user authentication exists
             if (userAuth) {
                 //create the user
                 const userRef = await createUserProfileDocument(userAuth);
                 //get the user data for the for the frontEnd
                 userRef.onSnapshot(snapShot => {
-                    //console.log(snapShot.data())
-                    this.setState({
-                        currentUser: {
-                            id: snapShot.id,
-                            ...snapShot
-                        }
-                    }, (() => {
-                        console.log(snapShot.data())
-                    }));
-                    console.log(this.state);
+                    //here we call our setCurrentUser function from userAction and set the value
+                    setCurrentUser({
+                        id: snapShot.id,
+                        ...snapShot.data()
+                    });
                 });
-
             }
-            this.setState({currentUser: userAuth})
 
-        })
-
+            setCurrentUser(userAuth);
+        });
     }
 
     //THIS WILL CLOSE THE SUBSCRIPTION
@@ -61,7 +55,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <HeaderComponent currentUser={this.state.currentUser}/>
+                <HeaderComponent/>
                 <Switch>
                     <Route exact path='/' component={HomePage}/>
                     <Route exact path='/shop' component={ShopPage}/>
@@ -72,5 +66,13 @@ class App extends Component {
     }
 }
 
+//this sets the current user by calling user sections and setting user as User which userActions uses it as the payload
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+    setCurrentUser: user => dispatch(setCurrentUser(user))
+});
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(App);

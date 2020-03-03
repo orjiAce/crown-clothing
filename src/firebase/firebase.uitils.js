@@ -25,25 +25,26 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     //console.log(snapShot);
 
     //if snapshot doesn't exist, meaning if this user doesn't exist in our 'user' database create one
+
     if (!snapShot.exists) {
-        const {displayName, email, uid} = userAuth;
+        const {displayName, email} = userAuth;
         const createdAt = new Date();
         //wrap the async request that adds the user to our database
         try {
             await userRef.set({
                 displayName,
-                createdAt,
                 email,
-                uid,
+                createdAt,
                 ...additionalData
             });
-            console.log("Successfully created!");
         } catch (error) {
             console.log('error creating user', error.message);
         }
     }
+
     return userRef;
 };
+
 
 firebase.initializeApp(config);
 

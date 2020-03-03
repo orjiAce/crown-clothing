@@ -1,63 +1,74 @@
-import * as React from 'react';
+import React from 'react';
+
+import FormInput from '../form-input/form-input';
+import CustomButton from '../customer-button/custom-btn';
+
+import {auth, signInWithGoogle} from '../../firebase/firebase.uitils';
+
 import './SignIn.scss';
-import FormInput from "../form-input/form-input";
-import {CustomBtn} from "../customer-button/custom-btn";
-import {auth, signInWithGoogle} from "../../firebase/firebase.uitils";
 
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            password: '',
-            email: ''
-        }
+            email: '',
+            password: ''
+        };
     }
 
-    handleSubmit = async (e) => {
-        e.preventDefault();
-        const {email, password} = this.state;
-        try {
-            //sign in user
-            await auth.signInWithEmailAndPassword(email, password);
-            this.setState({
-                "password": '',
-                "email": '',
-            })
-        } catch (e) {
-            console.log(e)
-        }
+    handleSubmit = async event => {
+        event.preventDefault();
 
+        const {email, password} = this.state;
+
+        try {
+            await auth.signInWithEmailAndPassword(email, password);
+            this.setState({email: '', password: ''});
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-
     handleChange = event => {
-        const {name, value} = event.target;
-        this.setState({[name]: value})
+        const {value, name} = event.target;
+
+        this.setState({[name]: value});
     };
 
     render() {
         return (
-            <div className="signIn">
-                <h2>Already have an account?</h2>
-                <span> Sign in with your email and password</span>
+            <div className='sign-in'>
+                <h2>I already have an account</h2>
+                <span>Sign in with your email and password</span>
 
                 <form onSubmit={this.handleSubmit}>
-                    <FormInput handleChange={this.handleChange} label="email" name="email" value={this.state.email}
-                               type="email" required={true}/>
-
-
-                    <FormInput handleChange={this.handleChange} label="password" name="password"
-                               value={this.state.password} type="password" required={true}/>
-                    <div className="buttons">
-
-                        <CustomBtn type="submit">Sign In </CustomBtn>
-                        {/*check if its a google sign in button*/}
-                        <CustomBtn onClick={signInWithGoogle} isGoogleSignIn>Sign in with google</CustomBtn>
+                    <FormInput
+                        name='email'
+                        type='email'
+                        handleChange={this.handleChange}
+                        value={this.state.email}
+                        label='email'
+                        required
+                    />
+                    <FormInput
+                        name='password'
+                        type='password'
+                        value={this.state.password}
+                        handleChange={this.handleChange}
+                        label='password'
+                        required
+                    />
+                    <div className='buttons'>
+                        <CustomButton type='submit'> Sign in </CustomButton>
+                        <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
+                            Sign in with Google
+                        </CustomButton>
                     </div>
                 </form>
             </div>
         );
-    };
+    }
 }
 
 export default SignIn;
