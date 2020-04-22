@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import './App.css';
 import HomePage from "./pages/homepage/homepage";
 import SignIn from './pages/auth-forms/auth-page'
@@ -59,12 +59,18 @@ class App extends Component {
                 <Switch>
                     <Route exact path='/' component={HomePage}/>
                     <Route exact path='/shop' component={ShopPage}/>
-                    <Route exact path='/SignIn' component={SignIn}/>
+                    {/*here we user render to determine what component to render when a particular condition is met*/}
+                    <Route exact path='/SignIn'
+                           render={() => this.props.currentUser ? (<Redirect to='/'/>) : <Redirect to="/signin"/>}/>
                 </Switch>
             </div>
         );
     }
 }
+
+const mapStateToProps = ({user}) => ({
+    currentUser: user.currentUser
+});
 
 //this sets the current user by calling user sections and setting user as User which userActions uses it as the payload
 
@@ -73,6 +79,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(App);
