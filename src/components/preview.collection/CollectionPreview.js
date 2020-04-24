@@ -10,10 +10,10 @@ const CollectionPreview = ({title, items}) => {
             <div className="preview">
                 {
                     //filter through the items we got as props from the ShopPage, set limit to 4 for each item, destructure and spread the data like so {...otherItemProps}
-                    items.filter((item, idx) => idx < 4).map(({id, ...otherItemProps}) => (
+                    items.filter((item, idx) => idx < 4).map(item => (
 
 
-                        <CollectionItem key={id} {...otherItemProps}/>
+                        <CollectionItem key={item.id} item={item}/>
 
                     ))
                 }
