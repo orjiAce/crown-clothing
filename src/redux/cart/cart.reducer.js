@@ -18,7 +18,7 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         case CartActionTypes.ADD_ITEM:
             return {
                 ...state,
-                //first spread i  the existing cart items (state.cartItems) the add the new new cart items
+                //first get the existing cart items (state.cartItems) then add the new new cart items
                 cartItems: addItemToCart(state.cartItems, action.payload)
             };
         default:
