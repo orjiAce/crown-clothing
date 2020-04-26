@@ -1,6 +1,6 @@
 import React from 'react';
 import './cart-item.styles.scss';
-
+//item that holds users products on the cart
 const CartItem = ({item: {price, id, imageUrl, name, quantity}}) => {
     return (
         <div className="cart-item">

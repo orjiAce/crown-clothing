@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import './App.css';
+import AuthPage from "./pages/auth-forms/auth-page";
 import HomePage from "./pages/homepage/homepage";
-import SignIn from './pages/auth-forms/auth-page'
 import ShopPage from "./pages/shop/ShopPage";
 import HeaderComponent from "./components/header/header-component";
 import {auth, createUserProfileDocument} from "./firebase/firebase.uitils";
 import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/userActions'
+import SignIn from "./components/signIn/SignIn";
 
 //connect allows our component to have access to things related to redux
 
@@ -60,8 +61,17 @@ class App extends Component {
                     <Route exact path='/' component={HomePage}/>
                     <Route exact path='/shop' component={ShopPage}/>
                     {/*here we user render to determine what component to render when a particular condition is met*/}
-                    <Route exact path='/SignIn'
-                           render={() => this.props.currentUser ? (<Redirect to='/'/>) : <Redirect to="/signin"/>}/>
+                    <Route
+                        exact
+                        path='/signin'
+                        render={() =>
+                            this.props.currentUser ? (
+                                <Redirect to='/'/>
+                            ) : (
+                                <AuthPage/>
+                            )
+                        }
+                    />
                 </Switch>
             </div>
         );
