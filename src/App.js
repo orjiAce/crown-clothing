@@ -8,7 +8,9 @@ import HeaderComponent from "./components/header/header-component";
 import {auth, createUserProfileDocument} from "./firebase/firebase.uitils";
 import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/userActions'
-import SignIn from "./components/signIn/SignIn";
+import {selectCurrentUser} from "./redux/user/user.selector";
+import {createStructuredSelector} from "reselect";
+import Checkout from "./components/checkout/checkout";
 
 //connect allows our component to have access to things related to redux
 
@@ -59,7 +61,8 @@ class App extends Component {
                 <HeaderComponent/>
                 <Switch>
                     <Route exact path='/' component={HomePage}/>
-                    <Route exact path='/shop' component={ShopPage}/>
+                    <Route path='/shop' component={ShopPage}/>
+                    <Route exact path='/checkout' component={Checkout}/>
                     {/*here we user render to determine what component to render when a particular condition is met*/}
                     <Route
                         exact
@@ -78,8 +81,8 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = ({user}) => ({
-    currentUser: user.currentUser
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser
 });
 
 //this sets the current user by calling user sections and setting user as User which userActions uses it as the payload
