@@ -18,3 +18,24 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
     return [...cartItems, {...cartItemToAdd, quantity: 1}]
 
 };
+
+//first check if cart item exist and if the quantity is 1
+export const removeItemFromCart = (cartItems, cartItemToRemove) => {
+
+    //this checks if the cartItem exists in the cartItem
+    const existingCartItem = cartItems.find(
+        cartItems => cartItems.id === cartItemToRemove.id
+    );
+
+    //check if the cartItem quantity is equal to 1
+    if (existingCartItem.quantity === 1) {
+        return cartItems.filter(cartItems => cartItems.id !== cartItemToRemove.id);
+    }
+
+    return cartItems.map(cartItem => cartItem.id === cartItemToRemove.id ? {
+            ...cartItem,
+            quantity: cartItem.quantity - 1
+        }
+        : cartItem);
+
+};
