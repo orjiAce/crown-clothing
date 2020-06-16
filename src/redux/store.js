@@ -1,12 +1,16 @@
 // middleware receives action and do something with it
 import {createStore, applyMiddleware} from 'redux';
 import logger from 'redux-logger';
+import {persistStore} from 'redux-persist'
+
 
 import rootReducer from './root-reducer';
 
 const middlewares = [logger];
 
-const store = createStore(rootReducer, applyMiddleware(...middlewares));
+export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
-export default store;
+//this calls our PersistStore then passes in our store
+export const persistor = persistStore(store);
+export default {store, persistor};
 
