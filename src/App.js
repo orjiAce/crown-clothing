@@ -12,6 +12,7 @@ import {selectCurrentUser} from "./redux/user/user.selector";
 import {createStructuredSelector} from "reselect";
 import Checkout from "./components/checkout/checkout";
 
+
 //connect allows our component to have access to things related to redux
 
 
@@ -47,6 +48,7 @@ class App extends Component {
             }
 
             setCurrentUser(userAuth);
+
         });
     }
 
@@ -82,7 +84,8 @@ class App extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-    currentUser: selectCurrentUser
+    currentUser: selectCurrentUser,
+
 });
 
 //this sets the current user by calling user sections and setting user as User which userActions uses it as the payload
