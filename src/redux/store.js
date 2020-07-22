@@ -1,19 +1,23 @@
-// middleware receives action and do something with it
 import {createStore, applyMiddleware} from 'redux';
+import {persistStore} from 'redux-persist';
 import logger from 'redux-logger';
-import {persistStore} from 'redux-persist'
-
+import createSagaMiddleware from 'redux-saga';
 
 import rootReducer from './root-reducer';
+import rootSaga from './root-saga';
 
-const middlewares = [];
+const sagaMiddleware = createSagaMiddleware();
+
+const middlewares = [sagaMiddleware];
+
 if (process.env.NODE_ENV === 'development') {
-    middlewares.push(logger)
+    middlewares.push(logger);
 }
 
 export const store = createStore(rootReducer, applyMiddleware(...middlewares));
 
-//this calls our PersistStore then passes in our store
-export const persistor = persistStore(store);
-export default {store, persistor};
+sagaMiddleware.run(rootSaga);
 
+export const persistor = persistStore(store);
+
+export default {store, persistStore};

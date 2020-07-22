@@ -12,6 +12,7 @@ import {selectCurrentUser} from "./redux/user/user.selector";
 import {createStructuredSelector} from "reselect";
 import Checkout from "./components/checkout/checkout";
 
+import {checkUserSession} from "./redux/user/userActions";
 
 //connect allows our component to have access to things related to redux
 
@@ -23,37 +24,13 @@ class App extends Component {
 
     componentDidMount() {
 
-        //because this is an open subscription we wanna close the subscription
-        /*    auth.onAuthStateChanged(user => {
-                this.setState({currentUser: user});
-                //console.log(user)
-            })*/
-
-        //destructure setCurrentUser from props
-        const {setCurrentUser} = this.props;
-
-        this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-            //if user authentication exists
-            if (userAuth) {
-                //create the user
-                const userRef = await createUserProfileDocument(userAuth);
-                //get the user data for the for the frontEnd
-                userRef.onSnapshot(snapShot => {
-                    //here we call our setCurrentUser function from userAction and set the value
-                    setCurrentUser({
-                        id: snapShot.id,
-                        ...snapShot.data()
-                    });
-                });
-            }
-
-            setCurrentUser(userAuth);
-
-        });
+        const {checkUserSession} = this.props;
+        checkUserSession();
     }
 
     //THIS WILL CLOSE THE SUBSCRIPTION
     componentWillUnmount() {
+
         this.unsubscribeFromAuth();
     }
 
@@ -88,13 +65,11 @@ const mapStateToProps = createStructuredSelector({
 
 });
 
+const mapDispatchToProps = dispatch => ({
+    checkUserSession: () => dispatch(checkUserSession())
+})
 //this sets the current user by calling user sections and setting user as User which userActions uses it as the payload
 
-const mapDispatchToProps = dispatch => ({
-    setCurrentUser: user => dispatch(setCurrentUser(user))
-});
-
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps, mapDispatchToProps
 )(App);
